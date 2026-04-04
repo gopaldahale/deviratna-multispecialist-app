@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setUserIn }) => {
   // style
   const loginFormClass = "bg-white p-6 rounded shadow-md w-80";
   const h2Class = "text-2xl font-bold mb-4 text-center";
@@ -15,24 +15,26 @@ const Login = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    const loginData = { emailInput, passInput };
     if (!emailInput.trim() || !passInput.trim()) {
       alert("Please fill all fields");
       return;
     }
-    console.log(loginData);
 
-    const getStoredUserFromlocal = JSON.parse(localStorage.getItem("users"))
+    const getStoredUserFromlocal = JSON.parse(localStorage.getItem("users")) || [];
 
-    const findExistingUser = getStoredUserFromlocal.find(
+    const loggedInUser = getStoredUserFromlocal.find(
       (users) => users.email === emailInput && users.password === passInput
     )
 
-    if (findExistingUser) {
-      localStorage.setItem("userLoggedIn", "true");
-      alert('User logged in!')
+    if (loggedInUser) {
+      // localStorage.setItem("isUserLoggedIn", "true");
+      localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+      navigate("/dashboard");
+      setTimeout(() => {
+        alert('User logged in!')
+      }, 700)
 
-    } else { alert("No user found. Please register first."); return; }
+    } else { alert("Invalid email or password ❌"); return; }
 
   }
   return (

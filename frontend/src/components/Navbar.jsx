@@ -1,8 +1,20 @@
 import React from 'react'
 import logo from '../assets/hospitallogo2.PNG'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = ({ userLogState, setUserIn }) => {
+
+    // style 
+    const menuLink = "text-sm font-medium text-[#3a6080] px-4 py-2 hover:bg-[#edf5fb] hover:text-[#1a6fa8] cursor-pointer"
+
+    const navigate = useNavigate();
+
+    const isUserLoggedIn = localStorage.getItem('loggedInUser')
+    const handleLogout = () => { 
+        localStorage.removeItem("loggedInUser")
+        navigate('/login');
+    }
+
     return (
         <nav className="relative bg-white border-b border-[#dce8f0] px-10 py-2 flex justify-between items-center shadow-[0_2px_16px_rgba(14,80,130,0.07)]">
 
@@ -23,19 +35,27 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center ">
-                <Link to="/" className="text-sm font-medium text-[#3a6080] px-4 py-2 rounded-lg hover:bg-[#edf5fb] hover:text-[#1a6fa8] transition-all cursor-pointer">
+                <Link to="/" className={menuLink}>
                     Home
                 </Link>
 
-                <div className="w-px h-5 bg-[#dce8f0] mr-5" />
+                {isUserLoggedIn ?
+                    (<>
+                        <Link to="/dashboard" className={menuLink}>Dashboard</Link>
+                        <div className="w-px h-5 bg-[#dce8f0] mr-5" />
+                        <button onClick={handleLogout} className="text-sm font-medium text-white px-4 py-2 rounded-lg bg-red-700 shadow-[0_3px_10px_rgba(26,111,168,0.3)] hover:shadow-[0_4px_14px_rgba(26,111,168,0.4)] cursor-pointer">
+                            Logout
+                        </button>
+                    </>
+                    ) : <>
+                        <div className="w-px h-5 bg-[#dce8f0] mr-5" />
+                        <Link to="/login" className="text-sm font-medium text-[#1a6fa8] px-4 py-2 mr-5 rounded-lg border border-[#c2ddf0] hover:border-[#1a6fa8] hover:bg-[#edf5fb] cursor-pointer">
+                            Login
+                        </Link>
 
-                <Link to="/login" className="text-sm font-medium text-[#1a6fa8] px-4 py-2 mr-5 rounded-lg border border-[#c2ddf0] hover:border-[#1a6fa8] hover:bg-[#edf5fb] transition-all cursor-pointer">
-                    Login
-                </Link>
-
-                <Link to={"/register"} className="text-sm font-medium text-white px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a6fa8] to-[#2589c8] shadow-[0_3px_10px_rgba(26,111,168,0.3)] hover:shadow-[0_4px_14px_rgba(26,111,168,0.4)] cursor-pointer">
-                    Register
-                </Link>
+                        <Link to={"/register"} className="text-sm font-medium text-white px-4 py-2 rounded-lg bg-gradient-to-br from-[#1a6fa8] to-[#2589c8] shadow-[0_3px_10px_rgba(26,111,168,0.3)] hover:shadow-[0_4px_14px_rgba(26,111,168,0.4)] cursor-pointer">
+                            Register
+                        </Link></>}
             </div>
         </nav>
     )

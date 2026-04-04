@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
   // style
@@ -7,8 +8,10 @@ export const Register = () => {
   const inputClass = "w-full mb-3 p-2 border rounded";
   const submitBtnClass = "w-full bg-gradient-to-br from-[#1a6fa8] to-[#38b2ac] text-white p-2 rounded hover:bg-blue-700";
 
-  const [userData, setUserData] = useState({ username: '', email: '', password: '' })
-  const { username, email, password } = userData
+  const navigate = useNavigate()
+
+  const [userData, setUserData] = useState({ username: '', email: '', password: '', role: 'patient' })
+  const { username, email, password, role } = userData
 
   const handleUserChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -35,6 +38,7 @@ export const Register = () => {
     localStorage.setItem("users", JSON.stringify(existingUsers));
     setTimeout(() => {
       alert("Registered successfully ✅");
+      navigate("/login")
     }, 600)
   }
   return (
@@ -70,6 +74,16 @@ export const Register = () => {
           onChange={handleUserChange}
 
         />
+
+        <select
+          className={inputClass}
+          name="role"
+          value={role}
+          onChange={handleUserChange}
+        >
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
 
         <button
           type="submit"
